@@ -1,0 +1,19 @@
+{
+  "name": "di-namic",
+  "version": "0.0.1",
+  "description": "Simple dependency injection container for Node",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leebow/di-namic.git"
+  },
+  "author": "leebow",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leebow/di-namic/issues"
+  },
+  "homepage": "https://github.com/leebow/di-namic#readme"
+}
