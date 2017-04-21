@@ -23,16 +23,18 @@ describe('unit - container', function () {
 
         context('start', function () {
 
-            it('successfully resolves a dependency', function (done) {
+            it('successfully resolves a dependency tree', function (done) {
 
                 var container = new Container();
-                container.bind('Dependency1', Dependency1);
-                container.bind('Dependency2', Dependency2);
-                container.bind('Obj1', Obj1, [Dependency1, Dependency2]);
 
-                var obj1 = container.resolve('Obj1');
+                container.register('Bob', Dependency1);
+                container.register('Mary', Dependency2);
+                container.register('Joe', Obj1, ['Bob', 'Mary']);
+
+                var obj1 = container.resolve('Joe');
 
                 obj1.testMethod(function (err, result) {
+                    expect(result).to.equal('success');
                     done();
                 });
             });

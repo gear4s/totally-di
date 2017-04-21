@@ -5,9 +5,7 @@ function Dependency1() {
 
 Dependency1.prototype.testMethod = function (callback) {
 
-    setTimeout(function(){
-        console.log('--> Dependency1.testMethod CALLED');
+    setTimeout(function () {
         callback();
     }, 2000);
-
 };

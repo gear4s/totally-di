@@ -6,12 +6,13 @@ function TestObj(dependency1, dependency2) {
 }
 
 TestObj.prototype.testMethod = function (callback) {
-    console.log('--> INSIDE TestObj.TestMethod');
+    var self = this;
 
-    this.__dependency1.testMethod(function (err, result) {
-        console.log('--> CALLBACK INVOKED!');
-        callback();
+    this.__dependency1.testMethod(function (err) {
+        if(err)
+            return callback(err);
+
+        if (self.__dependency2.testMethod())
+            callback(null, 'success');
     });
-
-    this.__dependency2.testMethod();
 };
