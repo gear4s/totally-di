@@ -13,3 +13,15 @@ So I decided to create my own DI framework to do things the way I want them to b
 - https://en.wikipedia.org/wiki/SOLID
 - https://martinfowler.com/articles/dipInTheWild.html
 
+
+
+## Design
+
+- Single 'container' where all dependencies are defined
+  - code-based as opposed to configuration-based
+  - each dependency has a scope:
+    - none OR
+    - singleton
+- The container would generally be required by the top-level 'entry-point' .js file, which resolves dependencies from the container. As each of these has its own set of dependencies, the whole chain of 
+
+

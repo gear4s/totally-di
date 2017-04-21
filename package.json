@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/leebow/di-namic/issues"
   },
-  "homepage": "https://github.com/leebow/di-namic#readme"
+  "homepage": "https://github.com/leebow/di-namic#readme",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^3.2.0"
+  }
 }
