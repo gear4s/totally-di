@@ -19,5 +19,8 @@ Simple dependency injection container for Node
     - none OR
     - singleton
 - The container would generally be required by the top-level 'entry-point' .js file, which resolves dependencies from the container. As each of these has its own set of dependencies, a dependency graph is generated.
-
+- Registration of dependencies to include the following types:
+    - objects with a constructor (ie: an instance should be created at resolution-time)
+    - static objects
+    - primitive types (ie: numbers, booleans, strings)
 
