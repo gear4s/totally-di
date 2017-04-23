@@ -10,6 +10,7 @@ Simple dependency injection container for Node
 
 - https://en.wikipedia.org/wiki/SOLID
 - https://martinfowler.com/articles/dipInTheWild.html
+- http://www.devtrends.co.uk/blog/how-not-to-do-dependency-injection-the-static-or-singleton-container
 
 ## Design goals
 
@@ -23,4 +24,3 @@ Simple dependency injection container for Node
     - objects with a constructor (ie: an instance should be created at resolution-time)
     - static objects
     - primitive types (ie: numbers, booleans, strings)
-

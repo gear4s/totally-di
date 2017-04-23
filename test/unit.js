@@ -30,7 +30,7 @@ describe('unit - container', function () {
 
             container.register('Bob', Dependency1);
             container.register('Mary', Dependency2);
-            container.register('Joe', Obj1, ['Bob', 'Mary']);
+            container.register('Joe', Obj1, ['Bob', 'Mary']);   // 'Joe' depends on 'Bob' and 'Mary'
 
             var obj1 = container.resolve('Joe');
 
@@ -44,7 +44,7 @@ describe('unit - container', function () {
             var container = new Container();
 
             container.register('Milo', Dependency3);
-            container.register('Mask', Obj2, ['Milo']);
+            container.register('Mask', Obj2, ['Milo']); // 'Mask' depends on 'Milo'
 
             var obj2 = container.resolve('Mask');
             var result = obj2.testMethod();
@@ -58,7 +58,7 @@ describe('unit - container', function () {
             var container = new Container();
 
             container.register('Olive', 2);
-            container.register('Popeye', Obj3, ['Olive']);
+            container.register('Popeye', Obj3, ['Olive']);  // 'Popeye' depends on 'Olive'
 
             var obj2 = container.resolve('Popeye');
             var result = obj2.testMethod();
