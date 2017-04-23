@@ -3,8 +3,11 @@ var path = require('path');
 
 var Container = require('../lib/container');
 var Obj1 = require('./lib/obj-1');
+var Obj2 = require('./lib/obj-2');
+var Obj3 = require('./lib/obj-3');
 var Dependency1 = require('./lib/dependency-1');
 var Dependency2 = require('./lib/dependency-2');
+var Dependency3 = require('./lib/dependency-3');
 
 describe('unit - container', function () {
 
@@ -18,11 +21,6 @@ describe('unit - container', function () {
         });
 
         afterEach('stop', function (done) {
-            done();
-        });
-
-        it('successfully resolves a static object', function(done){
-            // TODO
             done();
         });
 
@@ -40,6 +38,34 @@ describe('unit - container', function () {
                 expect(result).to.equal('success');
                 done();
             });
+        });
+
+        it('successfully resolves a static object', function (done) {
+            var container = new Container();
+
+            container.register('Milo', Dependency3);
+            container.register('Mask', Obj2, ['Milo']);
+
+            var obj2 = container.resolve('Mask');
+            var result = obj2.testMethod();
+
+            expect(result).to.equal('success');
+
+            done();
+        });
+
+        it('successfully resolves a primitive', function (done) {
+            var container = new Container();
+
+            container.register('Olive', 2);
+            container.register('Popeye', Obj3, ['Olive']);
+
+            var obj2 = container.resolve('Popeye');
+            var result = obj2.testMethod();
+
+            expect(result).to.equal(2);
+
+            done();
         });
     });
 });

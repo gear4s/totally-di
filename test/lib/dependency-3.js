@@ -1,8 +1,9 @@
-module.exports = Dependency3;
+// static functions
 
-//  a static object
-var Dependency3 = {
-    testMethod: function () {
-        console.log('Called static testMethod');
+module.exports = (function () {
+    return {
+        testMethod: function () {
+            return 'success';
+        }
     }
-};
+})();
