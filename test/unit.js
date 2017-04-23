@@ -21,22 +21,24 @@ describe('unit - container', function () {
             done();
         });
 
-        context('start', function () {
+        it('successfully resolves a static object', function(done){
+            // TODO
+            done();
+        });
 
-            it('successfully resolves a dependency tree', function (done) {
+        it('successfully resolves a dependency tree', function (done) {
 
-                var container = new Container();
+            var container = new Container();
 
-                container.register('Bob', Dependency1);
-                container.register('Mary', Dependency2);
-                container.register('Joe', Obj1, ['Bob', 'Mary']);
+            container.register('Bob', Dependency1);
+            container.register('Mary', Dependency2);
+            container.register('Joe', Obj1, ['Bob', 'Mary']);
 
-                var obj1 = container.resolve('Joe');
+            var obj1 = container.resolve('Joe');
 
-                obj1.testMethod(function (err, result) {
-                    expect(result).to.equal('success');
-                    done();
-                });
+            obj1.testMethod(function (err, result) {
+                expect(result).to.equal('success');
+                done();
             });
         });
     });

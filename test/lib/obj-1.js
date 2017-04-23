@@ -1,8 +1,9 @@
 module.exports = TestObj;
 
-function TestObj(dependency1, dependency2) {
+function TestObj(dependency1, dependency2, dependency3) {
     this.__dependency1 = dependency1;
     this.__dependency2 = dependency2;
+    this.__dependency3 = dependency3;
 }
 
 TestObj.prototype.testMethod = function (callback) {
