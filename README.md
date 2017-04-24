@@ -7,9 +7,10 @@ To facilitate better architecture and testing of modules, by decoupling dependen
 
 ## Some background reading for the uninitiated
 
-- https://en.wikipedia.org/wiki/SOLID
+- https://martinfowler.com/bliki/InversionOfControl.html (old but still very relevant)
 - https://martinfowler.com/articles/dipInTheWild.html
 - http://www.devtrends.co.uk/blog/how-not-to-do-dependency-injection-the-static-or-singleton-container
+- https://en.wikipedia.org/wiki/SOLID
 
 ## Design goals
 
