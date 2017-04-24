@@ -3,8 +3,7 @@ Simple dependency injection container for Node
 
 ## Why?
 
-- To inject constructor dependencies without the need to decorate modules with annotations
-- To enable easier testing and design of modules
+To facilitate better architecture and testing of modules, by decoupling dependencies via the Inversion of Control pattern.
 
 ## Some background reading for the uninitiated
 
