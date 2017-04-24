@@ -54,7 +54,7 @@ describe('unit - container', function () {
             done();
         });
 
-        it('successfully resolves a primitive', function (done) {
+        it('successfully resolves a number primitive', function (done) {
             var container = new Container();
 
             container.register('Olive', 2);
@@ -64,6 +64,34 @@ describe('unit - container', function () {
             var result = obj2.testMethod();
 
             expect(result).to.equal(2);
+
+            done();
+        });
+
+        it('successfully resolves a boolean primitive', function (done) {
+            var container = new Container();
+
+            container.register('Olive', true);
+            container.register('Popeye', Obj3, ['Olive']);  // 'Popeye' depends on 'Olive'
+
+            var obj2 = container.resolve('Popeye');
+            var result = obj2.testMethod();
+
+            expect(result).to.equal(true);
+
+            done();
+        });
+
+        it('successfully resolves a string primitive', function (done) {
+            var container = new Container();
+
+            container.register('Olive', 'Squeak!');
+            container.register('Popeye', Obj3, ['Olive']);  // 'Popeye' depends on 'Olive'
+
+            var obj2 = container.resolve('Popeye');
+            var result = obj2.testMethod();
+
+            expect(result).to.equal('Squeak!');
 
             done();
         });
