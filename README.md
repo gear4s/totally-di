@@ -1,3 +1,5 @@
+[![travis](https://travis-ci.org/leebow/di-namic.svg?branch=master)](https://travis-ci.org/leebow/di-namic)
+
 # di-namic
 Simple dependency injection container for Node
 
