@@ -5,9 +5,12 @@ var Container = require('../lib/container');
 var Obj1 = require('./lib/obj-1');
 var Obj2 = require('./lib/obj-2');
 var Obj3 = require('./lib/obj-3');
+var Obj4 = require('./lib/obj-4');
+var Obj5 = require('./lib/obj-5');
 var Dependency1 = require('./lib/dependency-1');
 var Dependency2 = require('./lib/dependency-2');
 var Dependency3 = require('./lib/dependency-3');
+var Dependency4 = require('./lib/dependency-4');
 
 describe('unit - container', function () {
 
@@ -24,7 +27,7 @@ describe('unit - container', function () {
             done();
         });
 
-        it('successfully resolves a dependency tree', function (done) {
+        it('successfully resolves first-level dependencies', function (done) {
 
             var container = new Container();
 
@@ -35,6 +38,45 @@ describe('unit - container', function () {
             var obj1 = container.resolve('Joe');
 
             obj1.testMethod(function (err, result) {
+                expect(result).to.equal('success');
+                done();
+            });
+        });
+
+        it('successfully resolves nested dependencies', function (done) {
+
+            var container = new Container();
+
+            container.register('Bob', Dependency1);
+            container.register('Jack', Dependency4, ['Bob']);  // 'Jack' depends on 'Bob'
+            container.register('Jim', Obj4, ['Jack']);   // 'Joe' depends on 'Jack'
+
+            var obj4 = container.resolve('Jim');
+
+            obj4.testMethod(function (err, result) {
+                expect(result).to.equal('success');
+                done();
+            });
+        });
+
+        it('successfully resolves anonymous object value dependencies', function (done) {
+
+            /*
+                ie: a constructor dependency is an anonymous object, which itself contains a
+                key whose value is an object that we've registered...
+
+                MyPrototype(arg1, {key1: '@inject:dependency_x'})
+             */
+
+            var container = new Container();
+
+            container.register('Bob', Dependency1);
+            container.register('Ellie', {key1: '@inject:Bob'}); // anonymous object 'Ellie' depends on 'Bob'
+            container.register('Chuck', Obj5, ['Ellie']);   // 'Jim' depends on 'Ellie'
+
+            var obj5 = container.resolve('Chuck');
+
+            obj5.testMethod(function (err, result) {
                 expect(result).to.equal('success');
                 done();
             });
