@@ -59,27 +59,16 @@ describe('unit - container', function () {
             });
         });
 
-        it('successfully resolves anonymous object value dependencies', function (done) {
-
-            /*
-                ie: a constructor dependency is an anonymous object, which itself contains a
-                key whose value is an object that we've registered...
-
-                MyPrototype(arg1, {key1: '@inject:dependency_x'})
-             */
+        it('successfully resolves anonymous object directly', function (done) {
 
             var container = new Container();
 
-            container.register('Bob', Dependency1);
-            container.register('Ellie', {key1: '@inject:Bob'}); // anonymous object 'Ellie' depends on 'Bob'
-            container.register('Chuck', Obj5, ['Ellie']);   // 'Jim' depends on 'Ellie'
+            container.register('Freddie', {key1: 'Hello'}); // anonymous object 'Ellie' depends on 'Bob'
 
-            var obj5 = container.resolve('Chuck');
+            var result = container.resolve('Freddie');
 
-            obj5.testMethod(function (err, result) {
-                expect(result).to.equal('success');
-                done();
-            });
+            expect(result.key1).to.equal('Hello');
+            done();
         });
 
         it('successfully resolves a static object as a dependency', function (done) {
