@@ -82,7 +82,7 @@ describe('unit - container', function () {
             });
         });
 
-        it('successfully resolves a static object', function (done) {
+        it('successfully resolves a static object as a dependency', function (done) {
             var container = new Container();
 
             container.register('Milo', Dependency3);
@@ -92,6 +92,18 @@ describe('unit - container', function () {
             var result = obj2.testMethod();
 
             expect(result).to.equal('success');
+
+            done();
+        });
+
+        it('successfully resolves a static object directly', function (done) {
+            var container = new Container();
+
+            container.register('Milo', Dependency3);
+
+            var result = container.resolve('Milo');
+
+            expect(result.testMethod()).to.equal('success');
 
             done();
         });
