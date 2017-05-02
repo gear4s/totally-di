@@ -129,6 +129,7 @@ describe('unit - container', function () {
             container.register('Marmite', Dependency5, ['Toast']);
 
             var result = container.resolve('Marmite');
+            console.log('BINDINGS LENGTH: ', container.bindingLen);
 
             expect(result.testMethod()).to.equal('buttered');
 
