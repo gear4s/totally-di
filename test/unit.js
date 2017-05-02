@@ -11,6 +11,7 @@ var Dependency1 = require('./lib/dependency-1');
 var Dependency2 = require('./lib/dependency-2');
 var Dependency3 = require('./lib/dependency-3');
 var Dependency4 = require('./lib/dependency-4');
+var Dependency5 = require('./lib/dependency-5');
 
 describe('unit - container', function () {
 
@@ -59,6 +60,29 @@ describe('unit - container', function () {
             });
         });
 
+        it('successfully resolves anonymous object value dependencies', function (done) {
+
+            /*
+             ie: a constructor dependency is an anonymous object, which itself contains a
+             key whose value is an object that we've registered...
+
+             MyPrototype(arg1, {key1: '@inject:dependency_x'})
+             */
+
+            var container = new Container();
+
+            container.register('Bob', Dependency1);
+            container.register('Ellie', {key1: '@inject:Bob', key2: 'Blah'}); // anonymous object 'Ellie' depends on 'Bob'
+            container.register('Chuck', Obj5, ['Ellie']);   // 'Jim' depends on 'Ellie'
+
+            var obj5 = container.resolve('Chuck');
+
+            obj5.testMethod(function (err, result) {
+                expect(result).to.equal('success');
+                done();
+            });
+        });
+
         it('successfully resolves anonymous object directly', function (done) {
 
             var container = new Container();
@@ -91,6 +115,19 @@ describe('unit - container', function () {
             container.register('Milo', Dependency3);
 
             var result = container.resolve('Milo');
+
+            expect(result.testMethod()).to.equal('success');
+
+            done();
+        });
+
+        it('successfully resolves a static object directly 2', function (done) {
+            var container = new Container();
+
+            console.log(Dependency5);
+            container.register('Marmite', Dependency5);
+
+            var result = container.resolve('Marmite');
 
             expect(result.testMethod()).to.equal('success');
 
