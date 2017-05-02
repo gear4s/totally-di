@@ -1,9 +1,9 @@
 // static functions
 
-module.exports = function () {
+module.exports = function (param) {
     return {
         testMethod: function () {
-            return 'success';
+            return param;
         }
     }
 };

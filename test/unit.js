@@ -125,11 +125,12 @@ describe('unit - container', function () {
             var container = new Container();
 
             console.log(Dependency5);
-            container.register('Marmite', Dependency5);
+            container.register('Toast', 'buttered');
+            container.register('Marmite', Dependency5, ['Toast']);
 
             var result = container.resolve('Marmite');
 
-            expect(result.testMethod()).to.equal('success');
+            expect(result.testMethod()).to.equal('buttered');
 
             done();
         });
