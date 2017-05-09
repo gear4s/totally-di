@@ -32,15 +32,21 @@ describe('unit - container', function () {
 
             var container = new Container();
 
-            container.register('Bob', Dependency1);
-            container.register('Mary', Dependency2);
-            container.register('Joe', Obj1, ['Bob', 'Mary']);   // 'Joe' depends on 'Bob' and 'Mary'
+            container.register('Bob', Dependency1, function () {
+                container.register('Mary', Dependency2, function () {
+                    container.register('Joe', Obj1, ['Bob', 'Mary'], function () {
 
-            var obj1 = container.resolve('Joe');
+                        // 'Joe' depends on 'Bob' and 'Mary'
+                        container.resolve('Joe', function (err, result) {
 
-            obj1.testMethod(function (err, result) {
-                expect(result).to.equal('success');
-                done();
+                            result.testMethod(function (err, testResult) {
+                                expect(testResult).to.equal('success');
+                                done();
+                            });
+
+                        });
+                    });
+                });
             });
         });
 
@@ -48,15 +54,20 @@ describe('unit - container', function () {
 
             var container = new Container();
 
-            container.register('Bob', Dependency1);
-            container.register('Jack', Dependency4, ['Bob']);  // 'Jack' depends on 'Bob'
-            container.register('Jim', Obj4, ['Jack']);   // 'Joe' depends on 'Jack'
+            container.register('Bob', Dependency1, function () {
+                // 'Jack' depends on 'Bob'
+                container.register('Jack', Dependency4, ['Bob'], function () {
+                    // 'Joe' depends on 'Jack'
+                    container.register('Jim', Obj4, ['Jack'], function () {
+                        container.resolve('Jim', function (err, result) {
 
-            var obj4 = container.resolve('Jim');
-
-            obj4.testMethod(function (err, result) {
-                expect(result).to.equal('success');
-                done();
+                            result.testMethod(function (err, testResult) {
+                                expect(testResult).to.equal('success');
+                                done();
+                            });
+                        });
+                    });
+                });
             });
         });
 
@@ -71,111 +82,144 @@ describe('unit - container', function () {
 
             var container = new Container();
 
-            container.register('Bob', Dependency1);
-            container.register('Ellie', {key1: '@inject:Bob', key2: 'Blah'}); // anonymous object 'Ellie' depends on 'Bob'
-            container.register('Chuck', Obj5, ['Ellie']);   // 'Jim' depends on 'Ellie'
+            container.register('Bob', Dependency1, function () {
 
-            var obj5 = container.resolve('Chuck');
+                // anonymous object 'Ellie' depends on 'Bob'
+                container.register('Ellie', {key1: '@inject:Bob', key2: 'Blah'}, function () {
 
-            obj5.testMethod(function (err, result) {
-                expect(result).to.equal('success');
-                done();
+                    // 'Chuck' depends on 'Ellie'
+                    container.register('Chuck', Obj5, ['Ellie'], function () {
+
+                        container.resolve('Chuck', function (err, result) {
+
+                            result.testMethod(function (err, testResult) {
+                                expect(testResult).to.equal('success');
+                                done();
+                            });
+                        });
+                    });
+                });
             });
+
         });
 
         it('successfully resolves anonymous object directly', function (done) {
 
             var container = new Container();
 
-            container.register('Freddie', {key1: 'Hello'}); // anonymous object 'Ellie' depends on 'Bob'
+            container.register('Freddie', {key1: 'Hello'}, function () {
 
-            var result = container.resolve('Freddie');
-
-            expect(result.key1).to.equal('Hello');
-            done();
+                container.resolve('Freddie', function (err, result) {
+                    expect(result.key1).to.equal('Hello');
+                    done();
+                });
+            });
         });
 
         it('successfully resolves a static object as a dependency', function (done) {
             var container = new Container();
 
-            container.register('Milo', Dependency3);
-            container.register('Mask', Obj2, ['Milo']); // 'Mask' depends on 'Milo'
+            container.register('Milo', Dependency3, function () {
+                // 'Mask' depends on 'Milo'
+                container.register('Mask', Obj2, ['Milo'], function () {
 
-            var obj2 = container.resolve('Mask');
-            var result = obj2.testMethod();
+                    container.resolve('Mask', function (err, result) {
+                        var testResult = result.testMethod();
 
-            expect(result).to.equal('success');
+                        expect(testResult).to.equal('success');
 
-            done();
+                        done();
+                    });
+                });
+            });
         });
 
         it('successfully resolves a static object directly', function (done) {
             var container = new Container();
 
-            container.register('Milo', Dependency3);
+            container.register('Milo', Dependency3, function () {
+                container.resolve('Milo', function (err, result) {
+                    expect(result.testMethod()).to.equal('success');
 
-            var result = container.resolve('Milo');
-
-            expect(result.testMethod()).to.equal('success');
-
-            done();
+                    done();
+                });
+            });
         });
 
         it('successfully resolves a static object directly 2', function (done) {
             var container = new Container();
 
             console.log(Dependency5);
-            container.register('Toast', 'buttered');
-            container.register('Marmite', Dependency5, ['Toast']);
 
-            var result = container.resolve('Marmite');
-            console.log('BINDINGS LENGTH: ', container.bindingLen);
+            container.register('Toast', 'buttered', function () {
 
-            expect(result.testMethod()).to.equal('buttered');
+                container.register('Marmite', Dependency5, ['Toast'], function () {
 
-            done();
+                    container.resolve('Marmite', function (err, result) {
+
+                        console.log('BINDINGS LENGTH: ', container.bindingLen);
+
+                        expect(result.testMethod()).to.equal('buttered');
+
+                        done();
+                    });
+                });
+            });
         });
 
         it('successfully resolves a number primitive', function (done) {
             var container = new Container();
 
-            container.register('Olive', 2);
-            container.register('Popeye', Obj3, ['Olive']);  // 'Popeye' depends on 'Olive'
+            container.register('Olive', 2, function () {
 
-            var obj2 = container.resolve('Popeye');
-            var result = obj2.testMethod();
+                // 'Popeye' depends on 'Olive'
+                container.register('Popeye', Obj3, ['Olive'], function () {
 
-            expect(result).to.equal(2);
+                    container.resolve('Popeye', function (err, result) {
 
-            done();
+                        var testResult = result.testMethod();
+
+                        expect(testResult).to.equal(2);
+                        done();
+                    });
+                });
+            });
         });
 
         it('successfully resolves a boolean primitive', function (done) {
             var container = new Container();
 
-            container.register('Olive', true);
-            container.register('Popeye', Obj3, ['Olive']);  // 'Popeye' depends on 'Olive'
+            container.register('Olive', true, function () {
 
-            var obj2 = container.resolve('Popeye');
-            var result = obj2.testMethod();
+                // 'Popeye' depends on 'Olive'
+                container.register('Popeye', Obj3, ['Olive'], function () {
 
-            expect(result).to.equal(true);
+                    container.resolve('Popeye', function (err, result) {
+                        var testResult = result.testMethod();
 
-            done();
+                        expect(testResult).to.equal(true);
+                        done();
+                    });
+                });
+            });
         });
 
         it('successfully resolves a string primitive', function (done) {
             var container = new Container();
 
-            container.register('Olive', 'Squeak!');
-            container.register('Popeye', Obj3, ['Olive']);  // 'Popeye' depends on 'Olive'
+            container.register('Olive', 'Squeak!', function () {
 
-            var obj2 = container.resolve('Popeye');
-            var result = obj2.testMethod();
+                // 'Popeye' depends on 'Olive'
+                container.register('Popeye', Obj3, ['Olive'], function () {
 
-            expect(result).to.equal('Squeak!');
+                    container.resolve('Popeye', function (err, result) {
+                        var testResult = result.testMethod();
 
-            done();
+                        expect(testResult).to.equal('Squeak!');
+                        done();
+                    });
+                });
+            });
         });
     });
 });
