@@ -43,15 +43,19 @@ When using di-namic in a Node application:
 3. A "dependency tree" is created at the root/entry point of the application. For example this would be root __index.js__ file at of a typical Node application.
 4. Their are 2 main functions on the container, with the following signatures:
     - `register(alias, dependency, ctorArgAliases, callback)`, where:
-        - alias:
+        - __alias__:
             - (string) key to refer to the registration
-        - dependency - the dependency itself, which can be any of the following types:
+        - __dependency__ - the dependency itself, which can be any of the following types:
             - module
             - anonymous object
             - static object
             - primitive (string, integer, boolean)
+        - __ctorArgAliases__ - the constructor arguments, referred to by their aliases
+        - __callback__ - this is an async function, so this is the callback
+
     - `resolve(alias, callback)`, where:
-        - alias is the key used when registering the dependency
+        - __alias__ - the key used when registering the dependency
+        - __callback__ - this is an async function, so this is the callback
 
 ## Example
 
@@ -74,15 +78,20 @@ var container = new Container();
  register the dependencies with the container
 */
 var register = function(callback){
+
     container.register('Bob', Dependency1, function (err) {
+
         if(err)
             return callback(err);
 
         container.register('Mary', Dependency2, function (err) {
+
             if(err)
                 return callback(err);
 
+            // 'Joe' relies on 'Bob' and 'Mary'
             container.register('Joe', TestObj1, ['Bob', 'Mary'], function (err) {
+
                     if(err)
                         return callback(err);
 
@@ -96,14 +105,17 @@ var register = function(callback){
  register the dependencies and then immediately resolve them
 */
 register(function(err){
+
     if(err)
         throw err;
 
     container.resolve('Bob', function(err, dependency1){
+
         if(err)
                 throw err;
 
         container.resolve('Mary', function(err, dependency2){
+
             if(err)
                     throw err;
 
