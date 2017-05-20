@@ -39,10 +39,25 @@ The module is therefore not responsible for creating instances of a dependency, 
 When using di-namic in a Node application:
 
 1. Dependencies are registered with the __di-namic__ container
-2. The container should remain in scope for the lifetime of the application
+2. The container must remain in scope for the lifetime of the application
 3. A "dependency tree" is created at the root/entry point of the application. For example this would be root __index.js__ file at of a typical Node application.
+4. Their are 2 main functions on the container, with the following signatures:
+    - `register(alias, dependency, ctorArgAliases, callback)`, where:
+        - alias:
+            - (string) key to refer to the registration
+        - dependency - the dependency itself, which can be any of the following types:
+            - module
+            - anonymous object
+            - static object
+            - primitive (string, integer, boolean)
+    - `resolve(alias, callback)`, where:
+        - alias is the key used when registering the dependency
 
-eg:
+## Example
+
+    TestObj1
+            ↳ Dependency1
+            ↳ Dependency2
 
 __index.js__
 
@@ -67,7 +82,7 @@ var register = function(callback){
             if(err)
                 return callback(err);
 
-            container.register('Joe', Obj1, ['Bob', 'Mary'], function (err) {
+            container.register('Joe', TestObj1, ['Bob', 'Mary'], function (err) {
                     if(err)
                         return callback(err);
 
