@@ -48,31 +48,26 @@ When using di-namic in a Node application:
 3. A "dependency tree" is created at the root/entry point of the application. For example this would be root __index.js__ file of a typical Node application.
 
 4. There are 2 main functions on the container, with the following signatures:
-    ```javascript
-    register(alias, dependency, ctorArgAliases, callback)
-    ```
 
-    where:
-
-    - __alias__:
-        - (string) key to refer to the registration
-    - __dependency__ - the dependency itself, which can be any of the following types:
-        - module
-        - anonymous object
-        - static object
-        - primitive (string, integer, boolean)
-    - __ctorArgAliases__ - the constructor arguments, referred to by their aliases
-    - __callback__ - this is an async function, so this is the callback
+```javascript
+register(alias, dependency, ctorArgAliases, callback)
+```
+- __alias__:
+    - (string) key to refer to the registration
+- __dependency__ - the dependency itself, which can be any of the following types:
+    - module
+    - anonymous object
+    - static object
+    - primitive (string, integer, boolean)
+- __ctorArgAliases__ - the constructor arguments, referred to by their aliases
+- __callback__ - this is an async function, so this is the callback
         ​
 
-    ```javascript
-    resolve(alias, callback) 
-    ```
-
-    where:
-
-    - __alias__ - the key used when registering the dependency
-    - __callback__ - this is an async function, so this is the callback
+```javascript
+resolve(alias, callback)
+```
+- __alias__ - the key used when registering the dependency
+- __callback__ - this is an async function, so this is the callback
 
 ## Example
 
