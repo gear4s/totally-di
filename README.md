@@ -5,14 +5,106 @@ Simple dependency injection container for Node
 
 ## Why?
 
-To facilitate better architecture and testing of modules, by decoupling dependencies via the Inversion of Control pattern.
+To facilitate better architecture and testing of modules, by decoupling dependencies via the Inversion of Control paradigm.
 
-## Some background reading for the uninitiated
+## Usage
 
-- https://martinfowler.com/bliki/InversionOfControl.html (old but still very relevant)
-- https://martinfowler.com/articles/dipInTheWild.html
-- http://www.devtrends.co.uk/blog/how-not-to-do-dependency-injection-the-static-or-singleton-container
-- https://en.wikipedia.org/wiki/SOLID
+Using the framework requires an understanding of the principles of dependency injection, particularly __constructor injection__.
+
+Javascript modules would typically rely on external dependencies introduced via the constructor function. For example:
+
+```javascript
+module.exports = TestObj1;
+
+function TestObj1(dependency1, dependency2) {
+    this.__dependency1 = dependency1;
+    this.__dependency2 = dependency2;
+}
+
+TestObj1.prototype.testMethod = function (callback) {
+    var self = this;
+
+    this.__dependency1.testMethod(function (err) {
+        if (err)
+            return callback(err);
+
+        if (self.__dependency2.testMethod())
+            callback(null, 'success');
+    });
+};
+```
+
+The module is therefore not responsible for creating instances of a dependency, but is instead relying on a consumer to do the instantiation for us. From a testing perspective, this approach allows dependencies to be __externally mocked__.
+
+When using di-namic in a Node application:
+
+1. Dependencies are registered with the __di-namic__ container
+2. The container should remain in scope for the lifetime of the application
+3. A "dependency tree" is created at the root/entry point of the application. For example this would be root __index.js__ file at of a typical Node application.
+
+eg:
+
+__index.js__
+
+```javascript
+
+var Container = require('di-namic');
+var Dependency1 = require('../lib/dependency1');
+var Dependency2 = require('../lib/dependency2');
+var app = require('../app');
+
+var container = new Container();
+
+/*
+ register the dependencies with the container
+*/
+var register = function(callback){
+    container.register('Bob', Dependency1, function (err) {
+        if(err)
+            return callback(err);
+
+        container.register('Mary', Dependency2, function (err) {
+            if(err)
+                return callback(err);
+
+            container.register('Joe', Obj1, ['Bob', 'Mary'], function (err) {
+                    if(err)
+                        return callback(err);
+
+                    callback();
+                });
+            });
+        });
+}
+
+/*
+ register the dependencies and then immediately resolve them
+*/
+register(function(err){
+    if(err)
+        throw err;
+
+    container.resolve('Bob', function(err, result){
+        if(err)
+                throw err;
+
+        var dependency1 = result;
+
+        container.resolve('Mary', function(err, result){
+            if(err)
+                    throw err;
+
+            var dependency2 = result;
+
+            // now start the app with dependencies injected into the constructor
+            app.start(dependency1, dependency2);
+        })
+    })
+})
+
+```
+
+The above example is rather contrived - see the tests for a more comprehensive dependency tree example.
 
 ## Design goals
 
@@ -26,6 +118,13 @@ To facilitate better architecture and testing of modules, by decoupling dependen
     - objects with a constructor (ie: an instance should be created at resolution-time)
     - static objects
     - primitive types (ie: numbers, booleans, strings)
+
+## Some background reading for the uninitiated
+
+- https://martinfowler.com/bliki/InversionOfControl.html (old but still very relevant)
+- https://martinfowler.com/articles/dipInTheWild.html
+- http://www.devtrends.co.uk/blog/how-not-to-do-dependency-injection-the-static-or-singleton-container
+- https://en.wikipedia.org/wiki/SOLID
 
 ## Attribution & license
 
