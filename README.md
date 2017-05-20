@@ -63,8 +63,7 @@ When using di-namic in a Node application:
         - primitive (string, integer, boolean)
     - __ctorArgAliases__ - the constructor arguments, referred to by their aliases
     - __callback__ - this is an async function, so this is the callback
-
-    ​
+        ​
 
     ```javascript
     resolve(alias, callback) 
