@@ -6,7 +6,8 @@ Simple dependency injection container for Node
 ## Why?
 
 To facilitate better architecture and testing of modules, by decoupling dependencies via the Inversion of Control paradigm. Simply put:
-__"don't instantiate dependencies in the module!"__
+
+    __"don't instantiate dependencies in the module!"__
 
 ## Usage
 
@@ -41,7 +42,7 @@ When using di-namic in a Node application:
 
 1. Dependencies are registered with the __di-namic__ container
 2. The container must remain in scope for the lifetime of the application
-3. A "dependency tree" is created at the root/entry point of the application. For example this would be root __index.js__ file at of a typical Node application.
+3. A "dependency tree" is created at the root/entry point of the application. For example this would be root __index.js__ file of a typical Node application.
 4. Their are 2 main functions on the container, with the following signatures:
     - `register(alias, dependency, ctorArgAliases, callback)`, where:
         - __alias__:
