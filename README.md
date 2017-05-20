@@ -78,7 +78,6 @@ resolve(alias, callback)
 __index.js__
 
 ```javascript
-
 var Container = require('di-namic');
 var Dependency1 = require('../lib/dependency1');
 var Dependency2 = require('../lib/dependency2');
@@ -87,54 +86,54 @@ var app = require('../app');
 var container = new Container();
 
 /*
- register the dependencies with the container
+	register the dependencies with the container
 */
-var register = function(callback){
+var register = function (callback) {
 
-    container.register('Bob', Dependency1, function (err) {
+  container.register('Bob', Dependency1, function (err) {
 
-        if(err)
-            return callback(err);
+    if (err)
+      return callback(err);
 
-        container.register('Mary', Dependency2, function (err) {
+    container.register('Mary', Dependency2, function (err) {
 
-            if(err)
-                return callback(err);
+      if (err)
+        return callback(err);
 
-            // 'Joe' relies on 'Bob' and 'Mary'
-            container.register('Joe', TestObj1, ['Bob', 'Mary'], function (err) {
+      // 'Joe' relies on 'Bob' and 'Mary' 
+      container.register('Joe', TestObj1, ['Bob', 'Mary'], function (err) {
 
-                    if(err)
-                        return callback(err);
+        if (err)
+          return callback(err);
 
-                    callback();
-                });
-            });
-        });
+        callback();
+      });
+    });
+  });
 }
 
 /*
  register the dependencies and then immediately resolve them
 */
-register(function(err){
+register(function (err) {
 
-    if(err)
+  if (err)
+    throw err;
+
+  container.resolve('Bob', function (err, dependency1) {
+
+    if (err)
+      throw err;
+
+    container.resolve('Mary', function (err, dependency2) {
+
+      if (err)
         throw err;
 
-    container.resolve('Bob', function(err, dependency1){
-
-        if(err)
-                throw err;
-
-        container.resolve('Mary', function(err, dependency2){
-
-            if(err)
-                    throw err;
-
-            // now start the app with dependencies injected into the constructor
-            app.start(dependency1, dependency2);
-        })
+      // now start the app with dependencies injected into the constructor
+      app.start(dependency1, dependency2);
     })
+  })
 })
 ```
 
