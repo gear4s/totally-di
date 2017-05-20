@@ -5,7 +5,7 @@ Simple dependency injection container for Node
 
 ## Why?
 
-To facilitate better the design and testing of modules, by decoupling dependencies via the Inversion of Control paradigm. Simply put:
+To facilitate better the design and testing of modules, by decoupling dependencies via the Inversion of Control principle. Simply put:
 
 ***Don't instantiate dependencies in the module!***
 
