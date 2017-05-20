@@ -99,17 +99,13 @@ register(function(err){
     if(err)
         throw err;
 
-    container.resolve('Bob', function(err, result){
+    container.resolve('Bob', function(err, dependency1){
         if(err)
                 throw err;
 
-        var dependency1 = result;
-
-        container.resolve('Mary', function(err, result){
+        container.resolve('Mary', function(err, dependency2){
             if(err)
                     throw err;
-
-            var dependency2 = result;
 
             // now start the app with dependencies injected into the constructor
             app.start(dependency1, dependency2);
