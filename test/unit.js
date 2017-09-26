@@ -254,16 +254,16 @@ describe('unit - container', function () {
 
             container.registerFactory('Gin', Dependency6, 'create', function () {
 
-                //container.register('Tonic', Obj7, ['Gin'], function () {
+                container.register('Tonic', Obj7, ['Gin'], function () {
 
-                    container.resolve('Gin', function (err, result) {
+                    container.resolve('Tonic', function (err, result) {
 
                         result.testMethod(function (err, result) {
 
                             expect(result).to.equal('Slurp!');
                             done();
                         });
-                    //});
+                    });
                 });
             });
         });

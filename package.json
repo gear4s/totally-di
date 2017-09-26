@@ -1,6 +1,6 @@
 {
   "name": "di-namic",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "Simple dependency injection container for Node",
   "main": "index.js",
   "scripts": {

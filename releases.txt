@@ -6,3 +6,11 @@ v0.1.1
 v0.1.2
 ------
 - fix to resolve issue with non-prototype factory
+
+v0.1.21
+-------
+- missing exports in index.js
+
+v0.1.22
+-------
+- issue resolving factory generated constructor argument
