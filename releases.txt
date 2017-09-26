@@ -2,3 +2,7 @@ v0.1.1
 ------
 - Added registerFactory method to container
 - Added createInstance method to container
+
+v0.1.2
+------
+- fix to resolve issue with non-prototype factory
