@@ -7,11 +7,14 @@ var Obj2 = require('./lib/obj-2');
 var Obj3 = require('./lib/obj-3');
 var Obj4 = require('./lib/obj-4');
 var Obj5 = require('./lib/obj-5');
+var Obj6 = require('./lib/obj-6');
+var Obj7 = require('./lib/obj-7');
 var Dependency1 = require('./lib/dependency-1');
 var Dependency2 = require('./lib/dependency-2');
 var Dependency3 = require('./lib/dependency-3');
 var Dependency4 = require('./lib/dependency-4');
 var Dependency5 = require('./lib/dependency-5');
+var Dependency6 = require('./lib/dependency-6');
 
 describe('unit - container', function () {
 
@@ -30,7 +33,7 @@ describe('unit - container', function () {
 
         it('successfully resolves first-level dependencies', function (done) {
 
-            var container = new Container();
+            var container = Container.getInstance();
 
             container.register('Bob', Dependency1, function () {
                 container.register('Mary', Dependency2, function () {
@@ -45,6 +48,29 @@ describe('unit - container', function () {
                             });
 
                         });
+                    });
+                });
+            });
+        });
+
+        it('successfully registers and resolves when no constructor dependencies required', function (done) {
+
+            var container = new Container();
+
+            container.register('Joe', Obj6, function () {
+
+                container.resolve('Joe', function (err, result) {
+
+                    if (err)
+                        return done(err);
+
+                    result.testMethod(function (err, testResult) {
+
+                        if (err)
+                            return done(err);
+
+                        expect(testResult).to.equal('success');
+                        done();
                     });
                 });
             });
@@ -217,6 +243,26 @@ describe('unit - container', function () {
 
                         expect(testResult).to.equal('Squeak!');
                         done();
+                    });
+                });
+            });
+        });
+
+        it('successfully resolves an object instance from a factory', function (done) {
+
+            var container = Container.getInstance();
+
+            container.registerFactory('Gin', Dependency6, 'create', function () {
+
+                container.register('Tonic', Obj7, ['Gin'], function () {
+
+                    container.resolve('Tonic', function (err, result) {
+
+                        result.testMethod(function (err, result) {
+
+                            expect(result).to.equal('Slurp!');
+                            done();
+                        });
                     });
                 });
             });
