@@ -9,12 +9,14 @@ var Obj4 = require('./lib/obj-4');
 var Obj5 = require('./lib/obj-5');
 var Obj6 = require('./lib/obj-6');
 var Obj7 = require('./lib/obj-7');
+var Obj8 = require('./lib/obj-8');
 var Dependency1 = require('./lib/dependency-1');
 var Dependency2 = require('./lib/dependency-2');
 var Dependency3 = require('./lib/dependency-3');
 var Dependency4 = require('./lib/dependency-4');
 var Dependency5 = require('./lib/dependency-5');
 var Dependency6 = require('./lib/dependency-6');
+var Dependency7 = require('./lib/dependency-7');
 
 describe('unit - container', function () {
 
@@ -266,6 +268,62 @@ describe('unit - container', function () {
                     });
                 });
             });
+        });
+
+        it('successfully resolves a singleton object instance', function (done) {
+
+            var container = Container.getInstance();
+
+            container.registerSingleton('Mega', Obj8, function () {
+
+                container.resolve('Mega', function (err, result) {
+
+                    result.testMethod(1, function (err, result) {
+
+                        expect(result).to.equal(1);
+
+                        container.resolve('Mega', function (err, result) {
+
+                            result.testMethod(5, function (err, result) {
+
+                                expect(result).to.equal(6);
+
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        it('successfully resolves a singleton object dependency', function (done) {
+
+            var container = Container.getInstance();
+
+            container.registerSingleton('Mighty', Dependency7, function(){
+
+                container.register('Mouse', Obj8, ['Mighty'], function () {
+
+                    container.resolve('Mouse', function (err, result) {
+
+                        result.testMethod2(function (err, result) {
+
+                            expect(result).to.equal(1);
+
+                            container.resolve('Mouse', function (err, result) {
+
+                                result.testMethod2(function (err, result) {
+
+                                    expect(result).to.equal(2);
+
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+
         });
     });
 });
