@@ -10,6 +10,7 @@ var Obj5 = require('./lib/obj-5');
 var Obj6 = require('./lib/obj-6');
 var Obj7 = require('./lib/obj-7');
 var Obj8 = require('./lib/obj-8');
+var Obj9 = require('./lib/obj-9');
 var Dependency1 = require('./lib/dependency-1');
 var Dependency2 = require('./lib/dependency-2');
 var Dependency3 = require('./lib/dependency-3');
@@ -300,7 +301,7 @@ describe('unit - container', function () {
 
             var container = Container.getInstance();
 
-            container.registerSingleton('Mighty', Dependency7, function(){
+            container.registerSingleton('Mighty', Dependency7, function () {
 
                 container.register('Mouse', Obj8, ['Mighty'], function () {
 
@@ -324,6 +325,32 @@ describe('unit - container', function () {
                 });
             });
 
+        });
+
+        it('successfully resolves a singleton factory object dependency', function (done) {
+
+            var container = Container.getInstance();
+
+            container.registerSingletonFactory('Donald', Obj9, 'create', function () {
+
+                container.resolve('Donald', function (err, result) {
+
+                    result.testMethod(5, function (err, result) {
+
+                        expect(result).to.equal(5);
+
+                        container.resolve('Donald', function (err, result) {
+
+                            result.testMethod(11, function (err, result) {
+
+                                expect(result).to.equal(16);
+
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
         });
     });
 });

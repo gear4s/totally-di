@@ -10,7 +10,6 @@ function TestObj8(dependency7) {
 }
 
 TestObj8.prototype.testMethod = function (count, callback) {
-
     this.__counter += count;
     callback(null, this.__counter);
 };
