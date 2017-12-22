@@ -51,6 +51,7 @@ When using di-namic in a Node application:
 
 ```javascript
 register(alias, dependency, ctorArgAliases, callback)
+registerAsync(alias, dependency, ctorArgAliases).then...
 ```
 - __alias__:
     - (string) key to refer to the registration
@@ -64,6 +65,7 @@ register(alias, dependency, ctorArgAliases, callback)
 
 ```javascript
 resolve(alias, callback)
+resolveAsync(alias).then...
 ```
 - __alias__ - the key used when registering the dependency
 - __callback__ - this is an async function, so this is the callback
@@ -72,6 +74,7 @@ As from version **0.1.1**, the function `registerFactory` was introduced, to ena
 
 ```javascript
 registerFactory(alias, dependency, factoryMethodName, callback)
+registerFactoryAsync(alias, dependency, factoryMethodName).then...
 ```
 
 - __alias__:
