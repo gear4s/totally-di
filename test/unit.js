@@ -56,6 +56,23 @@ describe('unit - container', function () {
             });
         });
 
+        it('successfully resolves first-level dependencies with promise', async function () {
+
+            var container = Container.getInstance();
+
+            await container.registerAsync('Bob', Dependency1);
+            await container.registerAsync('Mary', Dependency2);
+            await container.registerAsync('Joe', Obj1, ['Bob', 'Mary']);
+
+            var joe = await container.resolveAsync('Joe');
+
+            joe.testMethod(function (err, testResult) {
+                expect(testResult).to.equal('success');
+            });
+        });
+
+
+
         it('successfully registers and resolves when no constructor dependencies required', function (done) {
 
             var container = new Container();
@@ -114,7 +131,7 @@ describe('unit - container', function () {
             container.register('Bob', Dependency1, function () {
 
                 // anonymous object 'Ellie' depends on 'Bob'
-                container.register('Ellie', {key1: '@inject:Bob', key2: 'Blah'}, function () {
+                container.register('Ellie', { key1: '@inject:Bob', key2: 'Blah' }, function () {
 
                     // 'Chuck' depends on 'Ellie'
                     container.register('Chuck', Obj5, ['Ellie'], function () {
@@ -136,7 +153,7 @@ describe('unit - container', function () {
 
             var container = new Container();
 
-            container.register('Freddie', {key1: 'Hello'}, function () {
+            container.register('Freddie', { key1: 'Hello' }, function () {
 
                 container.resolve('Freddie', function (err, result) {
                     expect(result.key1).to.equal('Hello');
@@ -177,8 +194,6 @@ describe('unit - container', function () {
 
         it('successfully resolves a static object directly 2', function (done) {
             var container = new Container();
-
-            console.log(Dependency5);
 
             container.register('Toast', 'buttered', function () {
 
@@ -271,6 +286,23 @@ describe('unit - container', function () {
             });
         });
 
+        it('successfully resolves an object instance from a factory with promise', async function () {
+
+            var container = Container.getInstance();
+
+            await container.registerFactoryAsync('Gin', Dependency6, 'create');
+            await container.registerAsync('Tonic', Obj7, ['Gin']);
+
+            var tonic = await container.resolveAsync('Tonic');
+
+            tonic.testMethod(function (err, result) {
+
+                expect(result).to.equal('Slurp!');
+
+            });
+
+        });
+
         it('successfully resolves a singleton object instance', function (done) {
 
             var container = Container.getInstance();
@@ -295,6 +327,20 @@ describe('unit - container', function () {
                     });
                 });
             });
+        });
+
+        it('successfully resolves a singleton object instance with promise', async function () {
+
+            var container = Container.getInstance();
+
+            await container.registerSingletonAsync('Mega', Obj8);
+
+            var mega1 = await container.resolveAsync('Mega');
+            var mega2 = await container.resolveAsync('Mega');
+
+            mega1.__counter++;
+            expect(mega2.__counter).to.be(1);
+
         });
 
         it('successfully resolves a singleton object dependency', function (done) {
@@ -351,6 +397,20 @@ describe('unit - container', function () {
                     });
                 });
             });
+        });
+
+        it('successfully resolves a singleton factory object dependency with promise', async function () {
+
+            var container = Container.getInstance();
+
+            await container.registerSingletonFactoryAsync('Donald', Obj9, 'create');
+
+            var donald1 = await container.resolveAsync('Donald');
+            var donald2 = await container.resolveAsync('Donald');
+
+            donald1.__counter++;
+            expect(donald2.__counter).to.be(1);
+
         });
     });
 });

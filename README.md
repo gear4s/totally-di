@@ -42,15 +42,13 @@ The module is therefore not responsible for creating instances of a dependency, 
 When using di-namic in a Node application:
 
 1. Dependencies are registered with the __di-namic__ container
-
 2. The container must remain in scope for the lifetime of the application
-
 3. A "dependency tree" is created at the root/entry point of the application. For example this would be root __index.js__ file of a typical Node application.
-
-4. There are 2 main functions on the container, with the following signatures:
+4. There are 2 main functions on the container: `register()` and `resolve()`, with the following signatures:
 
 ```javascript
 register(alias, dependency, ctorArgAliases, callback)
+registerAsync(alias, dependency, ctorArgAliases).then...
 ```
 - __alias__:
     - (string) key to refer to the registration
@@ -64,6 +62,7 @@ register(alias, dependency, ctorArgAliases, callback)
 
 ```javascript
 resolve(alias, callback)
+resolveAsync(alias).then...
 ```
 - __alias__ - the key used when registering the dependency
 - __callback__ - this is an async function, so this is the callback
@@ -72,6 +71,7 @@ As from version **0.1.1**, the function `registerFactory` was introduced, to ena
 
 ```javascript
 registerFactory(alias, dependency, factoryMethodName, callback)
+registerFactoryAsync(alias, dependency, factoryMethodName).then...
 ```
 
 - __alias__:
