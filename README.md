@@ -1,7 +1,7 @@
 [![travis](https://travis-ci.org/leebow/di-namic.svg?branch=master)](https://travis-ci.org/leebow/di-namic)
 
 # di-namic
-Simple dependency injection container for Node
+Simple dependency injection container for Node. __ECMAScript 6 only__.
 
 ## Why?
 
