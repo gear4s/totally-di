@@ -1,4 +1,6 @@
 [![travis](https://travis-ci.org/leebow/di-namic.svg?branch=master)](https://travis-ci.org/leebow/di-namic)
+[![node](https://img.shields.io/badge/node-8.4.0-green.svg)](https://nodejs.org/en/download/releases/)
+[![ecmascript 6](https://img.shields.io/badge/ecmascript-6-green.svg)](http://es6-features.org/)
 
 # di-namic
 Simple dependency injection container for Node. __ECMAScript 6 only__.
