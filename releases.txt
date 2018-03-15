@@ -30,3 +30,14 @@ v0.1.4
 v0.1.41
 ------
 - using spread operator
+
+v0.2.0
+------
+- using async
+
+v0.3.0
+------
+- added new ContainerV2 to simplify number of register methods
+    - ContainerV2 is a class
+    - ContainerV2 methods now use async (ie: return Promises by default)
+- Container is marked as deprecated
