@@ -1,23 +1,23 @@
 var expect = require('expect.js');
 var path = require('path');
 
-var Container = require('../lib/container');
-var Obj1 = require('./lib/obj-1');
-var Obj2 = require('./lib/obj-2');
-var Obj3 = require('./lib/obj-3');
-var Obj4 = require('./lib/obj-4');
-var Obj5 = require('./lib/obj-5');
-var Obj6 = require('./lib/obj-6');
-var Obj7 = require('./lib/obj-7');
-var Obj8 = require('./lib/obj-8');
-var Obj9 = require('./lib/obj-9');
-var Dependency1 = require('./lib/dependency-1');
-var Dependency2 = require('./lib/dependency-2');
-var Dependency3 = require('./lib/dependency-3');
-var Dependency4 = require('./lib/dependency-4');
-var Dependency5 = require('./lib/dependency-5');
-var Dependency6 = require('./lib/dependency-6');
-var Dependency7 = require('./lib/dependency-7');
+var Container = require('../../lib/container');
+var Obj1 = require('../lib/obj-1');
+var Obj2 = require('../lib/obj-2');
+var Obj3 = require('../lib/obj-3');
+var Obj4 = require('../lib/obj-4');
+var Obj5 = require('../lib/obj-5');
+var Obj6 = require('../lib/obj-6');
+var Obj7 = require('../lib/obj-7');
+var Obj8 = require('../lib/obj-8');
+var Obj9 = require('../lib/obj-9');
+var Dependency1 = require('../lib/dependency-1');
+var Dependency2 = require('../lib/dependency-2');
+var Dependency3 = require('../lib/dependency-3');
+var Dependency4 = require('../lib/dependency-4');
+var Dependency5 = require('../lib/dependency-5');
+var Dependency6 = require('../lib/dependency-6');
+var Dependency7 = require('../lib/dependency-7');
 
 describe('unit - container v1', function () {
 
