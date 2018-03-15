@@ -19,7 +19,7 @@ var Dependency5 = require('./lib/dependency-5');
 var Dependency6 = require('./lib/dependency-6');
 var Dependency7 = require('./lib/dependency-7');
 
-describe('unit - container', function () {
+describe('unit - container v1', function () {
 
     this.timeout(30000);
 

@@ -1,1 +1,5 @@
-module.exports = require('./lib/container');
+
+module.exports = {
+    container: require('./lib/container'),
+    containerV2: require('./lib/containerV2')
+};
