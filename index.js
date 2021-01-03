@@ -1,5 +1,2 @@
-
-module.exports = {
-    Container: require('./lib/container'),
-    ContainerV2: require('./lib/containerV2')
-};
+const Container = require("./lib/container.js");
+module.exports = Container.default;

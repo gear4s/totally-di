@@ -10,7 +10,6 @@ function TestObj5(anonymousObj) {
 
 TestObj5.prototype.testMethod = function (callback) {
     // invoke the testMethod on the object returned when accessing the value at key1
-   console.log(this.__anonymousObj.key1.testMethod);
     this.__anonymousObj.key1.testMethod(function (err, result) {
         callback(null, result);
     });
