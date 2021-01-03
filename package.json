@@ -1,6 +1,6 @@
 {
   "name": "totally-di",
-  "version": "0.1.2-1",
+  "version": "0.1.2-2",
   "description": "Simple dependency injection container forked from di-namic for Node",
   "main": "index.js",
   "types": "./typings/index.d.ts",
