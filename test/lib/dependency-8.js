@@ -1,5 +1,5 @@
 export default {
-  testFunction(callback) {
-    callback(undefined, 123);
+  constructor() {
+    this.failed = true;
   }
 }

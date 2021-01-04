@@ -1,13 +1,13 @@
 {
   "name": "totally-di",
-  "version": "0.2.0-1",
+  "version": "0.2.1",
   "description": "Simple dependency injection container forked from di-namic for Node",
   "main": "index.js",
   "types": "./typings/index.d.ts",
   "scripts": {
     "build": "babel src -d lib --copy-files",
     "prepare": "npm run build",
-    "test": "nyc --reporter=html mocha --require @babel/register --require chai/register-expect test/unit"
+    "test": "nyc --reporter=html mocha --require @babel/register --require sinon-register --require chai/register-expect test/unit"
   },
   "repository": {
     "type": "git",
@@ -39,5 +39,8 @@
     "prettier": "^2.1.2",
     "sinon": "^9.2.1",
     "sinon-chai": "^3.5.0"
+  },
+  "dependencies": {
+    "sinon-register": "^1.0.1"
   }
 }

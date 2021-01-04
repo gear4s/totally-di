@@ -13,6 +13,7 @@ export default class Core {
   createInstance(alias) {
     const binding = this.__getBinding(alias);
     const isSingleton = binding.singleton;
+    const isRawObject = binding.rawObject;
     const dependency = binding.dependency;
     const proto = dependency.prototype;
     const factoryMethod = dependency[binding.factoryMethod];
@@ -25,6 +26,11 @@ export default class Core {
 
     if (binding.ctorArgAliases != undefined)
       args.push(...this.__resolveDependencies(binding));
+
+    // if this is a raw object, just return it
+    if(isRawObject === true) {
+      return binding.dependency;
+    }
 
     // if this is a factory method, just invoke it and return
     if (factoryMethod != null) {

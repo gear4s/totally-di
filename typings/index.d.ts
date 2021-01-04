@@ -1,7 +1,7 @@
 import Container from "totally-di";
 
 declare module "totally-di" {
-  class Container {
+  export default class Container {
     /**
      * Get a new Container instance
      */
@@ -60,8 +60,4 @@ declare module "totally-di" {
      */
     resolve(alias: String): any
   };
-
-  export {
-    Container
-  }
 }

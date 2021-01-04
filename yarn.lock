@@ -3490,6 +3490,11 @@ sinon-chai@^3.5.0:
   resolved "https://registry.yarnpkg.com/sinon-chai/-/sinon-chai-3.5.0.tgz#c9a78304b0e15befe57ef68e8a85a00553f5c60e"
   integrity sha512-IifbusYiQBpUxxFJkR3wTU68xzBN0+bxCScEaKMjBvAQERg6FnTTc1F17rseLb1tjmkJ23730AXpFI0c47FgAg==
 
+sinon-register@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/sinon-register/-/sinon-register-1.0.1.tgz#038d9b19bfb0b8767acea0f4aa4b802dc25de0c9"
+  integrity sha1-A42bGb+wuHZ6zqD0qkuALcJd4Mk=
+
 sinon@^9.2.1:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/sinon/-/sinon-9.2.2.tgz#b83cf5d43838f99cfa3644453f4c7db23e7bd535"
