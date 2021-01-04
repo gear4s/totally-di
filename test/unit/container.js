@@ -8,6 +8,7 @@ import Obj6 from '../lib/obj-6';
 import Obj7 from '../lib/obj-7';
 import Obj8 from '../lib/obj-8';
 import Obj9 from '../lib/obj-9';
+import Obj10 from '../lib/obj-10';
 import Dependency1 from '../lib/dependency-1';
 import Dependency2 from '../lib/dependency-2';
 import Dependency3 from '../lib/dependency-3';
@@ -15,6 +16,8 @@ import Dependency4 from '../lib/dependency-4';
 import Dependency5 from '../lib/dependency-5';
 import Dependency6 from '../lib/dependency-6';
 import Dependency7 from '../lib/dependency-7';
+import Dependency8 from '../lib/dependency-8';
+import { expect } from 'chai';
 
 describe('unit - container v2', function () {
     this.timeout(30000);
@@ -214,6 +217,21 @@ describe('unit - container v2', function () {
                 expect(result).to.equal(2);
                 done();
             });
+        });
+    });
+
+    it.only('successfully resolves a raw object dependency', function (done) {
+        const container = Container.getInstance();
+
+        container.registerRawObject('Mighty', Dependency8);
+        container.register('Mouse', Obj10, ['Mighty']);
+
+        const mouse = container.resolve('Mouse');
+        expect(mouse).to.not.have.property("prototype");
+
+        mouse.testMethod(function (err, result) {
+            expect(result).to.equal(123);
+            done();
         });
     });
 

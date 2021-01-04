@@ -31,6 +31,18 @@ export default class Container {
     }
   };
 
+  registerRawObject(alias, dependency) {
+    try {
+      this.#core.addBinding({
+        alias: alias,
+        dependency: dependency,
+        rawObject: true
+      });
+    } catch (err) {
+      throw err;
+    }
+  };
+
   registerSingleton(alias, dependency, ctorArgAliases = []) {
     try {
       this.#core.addBinding({

@@ -78,7 +78,9 @@ export default class Core {
           case 'Object':
             if (currentBinding.factoryMethod != null)
               args.push(this.createInstance(arg));
-            else {
+            else if(currentBinding.rawObject) {
+              args.push(currentBinding.dependency);
+            } else {
               this.__injectAnonymousObjectValues(currentBinding);
               args.push(currentBinding.dependency);
             }

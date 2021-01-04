@@ -22,6 +22,14 @@ declare module "totally-di" {
     register(alias: String, dependency: any, ctorArgAliases: Array = []): void
 
     /***
+     * Register a new dependency as a raw object
+     * @param alias The string alias representing the type
+     * @param dependency The type itself (eg: Widget.prototype)
+     * @returns void
+     */
+    registerRawObject(alias: String, dependency: any): void
+
+    /***
      * Register a new dependency as a singleton class
      * @param alias The string alias representing the type
      * @param dependency The type itself (eg: Widget.prototype)
