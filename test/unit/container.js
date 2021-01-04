@@ -220,7 +220,7 @@ describe('unit - container v2', function () {
         });
     });
 
-    it.only('successfully resolves a raw object dependency', function () {
+    it('successfully resolves a raw object dependency', function () {
         const container = Container.getInstance();
 
         container.registerRawObject('Mighty', Dependency8);

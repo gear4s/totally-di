@@ -47,16 +47,19 @@ export default class Core {
       this.constructor(... args);
     }
 
-    // subclass extends superclass
-    if (proto) {
-      if (Core.__prototypeIsEmptyObject(proto))   // static object
-        return new dependency(... args);
-      else
-        Temp.prototype = Object.create(proto);  // inherit the prototype
-    } else  // no prototype
-      Temp.prototype = Object.create(dependency);
-
-    const instance = new Temp(args);
+    // IIFE to get instance
+    const instance = (() => {
+      // subclass extends superclass
+      if (proto) {
+        if (Core.__prototypeIsEmptyObject(proto))   // static object
+          return new dependency(... args);
+        else
+          Temp.prototype = Object.create(proto);  // inherit the prototype
+      } else  // no prototype
+        Temp.prototype = Object.create(dependency);
+  
+      return new Temp(args);
+    })(); 
 
     if (isSingleton)
       this.#singletons[binding.alias] = instance;
