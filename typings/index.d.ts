@@ -19,7 +19,7 @@ declare module "totally-di" {
      * @param ctorArgAliases Constructor argument array of type aliases
      * @returns void
      */
-    register(alias: String, dependency: any, ctorArgAliases: Array = []): void
+    register(alias: String, dependency: any, ctorArgAliases?: string[]): void
 
     /***
      * Register a new dependency as a raw object
@@ -35,7 +35,7 @@ declare module "totally-di" {
      * @param dependency The type itself (eg: Widget.prototype)
      * @param ctorArgAliases Constructor argument array of type aliases
      */
-    registerSingleton(alias: String, dependency: any, ctorArgAliases: Array = []): void
+    registerSingleton(alias: String, dependency: any, ctorArgAliases?: string[]): void
 
     /***
      * Register a new dependency as a normal class with a factory method
@@ -44,7 +44,7 @@ declare module "totally-di" {
      * @param factoryMethod The factory method used to create the instance
      * @param ctorArgAliases Constructor argument array of type aliases
      */
-    registerFactory(alias: String, dependency: any, factoryMethod: String, ctorArgAliases: Array = []): void
+    registerFactory(alias: String, dependency: any, factoryMethod: String, ctorArgAliases?: string[]): void
 
     /***
      * Register a new dependency as a singleton class with a factory method
@@ -53,11 +53,11 @@ declare module "totally-di" {
      * @param factoryMethod The factory method used to create the instance
      * @param ctorArgAliases Constructor argument array of type aliases
      */
-    registerSingletonFactory(alias: String, dependency: any, factoryMethod: String, ctorArgAliases: Array = []): void
+    registerSingletonFactory(alias: String, dependency: any, factoryMethod: String, ctorArgAliases?: string[]): void
 
     /***
      * Resolve a dependency by its alias which was registered
      */
     resolve(alias: String): any
-  };
+  }
 }
