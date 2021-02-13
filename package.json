@@ -7,6 +7,7 @@
   "scripts": {
     "build": "babel src -d lib --copy-files",
     "prepare": "npm run build",
+    "lint": "eslint '**/*.js'",
     "test": "nyc --reporter=html mocha --require @babel/register --require sinon-register --require chai/register-expect test/unit"
   },
   "repository": {
