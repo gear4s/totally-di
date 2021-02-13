@@ -24,7 +24,7 @@ export default class Core {
 
     const args = [];
 
-    if (binding.ctorArgAliases != undefined)
+    if (binding.ctorArgAliases !== undefined)
       args.push(...this.__resolveDependencies(binding));
 
     // if this is a raw object, just return it
@@ -66,7 +66,7 @@ export default class Core {
   }
 
   __getBinding(alias) {
-    return this.#bindings.find((binding) => binding.alias == alias);
+    return this.#bindings.find((binding) => binding.alias === alias);
   }
 
   static __prototypeIsEmptyObject(proto) {
@@ -101,7 +101,7 @@ export default class Core {
             args.push(this.createInstance(arg));
         }
 
-        if (arg.ctorArgAliases != undefined && arg.ctorArgAliases.length > 0)
+        if (arg.ctorArgAliases !== undefined && arg.ctorArgAliases.length > 0)
           return recurse(arg.ctorArgAliases);
       });
 
@@ -134,7 +134,7 @@ export default class Core {
       if (currentBinding.dependency.hasOwnProperty(key)) {
         const depTypeName = Core.__getTypeName(currentBinding.dependency[key]);
 
-        if (depTypeName == "String" && depTypeName.length > 0) {
+        if (depTypeName === "String" && depTypeName.length > 0) {
           const injectedAliasIndex = currentBinding.dependency[key].indexOf(
             "@inject:"
           );

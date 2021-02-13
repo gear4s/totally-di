@@ -8,7 +8,6 @@ import Obj6 from "../lib/obj-6";
 import Obj7 from "../lib/obj-7";
 import Obj8 from "../lib/obj-8";
 import Obj9 from "../lib/obj-9";
-import Obj10 from "../lib/obj-10";
 import Dependency1 from "../lib/dependency-1";
 import Dependency2 from "../lib/dependency-2";
 import Dependency3 from "../lib/dependency-3";

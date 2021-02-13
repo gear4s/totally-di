@@ -19,55 +19,39 @@ export default class Container {
   }
 
   register(alias, dependency, ctorArgAliases = []) {
-    try {
-      this.#core.addBinding({
-        alias: alias,
-        dependency: dependency,
-        ctorArgAliases: ctorArgAliases,
-        singleton: false,
-      });
-    } catch (err) {
-      throw err;
-    }
+    this.#core.addBinding({
+      alias: alias,
+      dependency: dependency,
+      ctorArgAliases: ctorArgAliases,
+      singleton: false,
+    });
   }
 
   registerRawObject(alias, dependency) {
-    try {
-      this.#core.addBinding({
-        alias: alias,
-        dependency: dependency,
-        rawObject: true,
-      });
-    } catch (err) {
-      throw err;
-    }
+    this.#core.addBinding({
+      alias: alias,
+      dependency: dependency,
+      rawObject: true,
+    });
   }
 
   registerSingleton(alias, dependency, ctorArgAliases = []) {
-    try {
-      this.#core.addBinding({
-        alias: alias,
-        dependency: dependency,
-        ctorArgAliases: ctorArgAliases,
-        singleton: true,
-      });
-    } catch (err) {
-      throw err;
-    }
+    this.#core.addBinding({
+      alias: alias,
+      dependency: dependency,
+      ctorArgAliases: ctorArgAliases,
+      singleton: true,
+    });
   }
 
   registerFactory(alias, dependency, factoryMethod, ctorArgAliases = []) {
-    try {
-      this.#core.addBinding({
-        alias: alias,
-        dependency: dependency,
-        ctorArgAliases: ctorArgAliases,
-        factoryMethod: factoryMethod,
-        singleton: false,
-      });
-    } catch (err) {
-      throw err;
-    }
+    this.#core.addBinding({
+      alias: alias,
+      dependency: dependency,
+      ctorArgAliases: ctorArgAliases,
+      factoryMethod: factoryMethod,
+      singleton: false,
+    });
   }
 
   registerSingletonFactory(
@@ -76,24 +60,16 @@ export default class Container {
     factoryMethod,
     ctorArgAliases = []
   ) {
-    try {
-      this.#core.addBinding({
-        alias: alias,
-        dependency: dependency,
-        ctorArgAliases: ctorArgAliases,
-        factoryMethod: factoryMethod,
-        singleton: true,
-      });
-    } catch (err) {
-      throw err;
-    }
+    this.#core.addBinding({
+      alias: alias,
+      dependency: dependency,
+      ctorArgAliases: ctorArgAliases,
+      factoryMethod: factoryMethod,
+      singleton: true,
+    });
   }
 
   resolve(alias) {
-    try {
-      return this.#core.createInstance(alias);
-    } catch (err) {
-      throw err;
-    }
+    return this.#core.createInstance(alias);
   }
 }
