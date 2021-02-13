@@ -131,7 +131,9 @@ export default class Core {
 
   __injectAnonymousObjectValues(currentBinding) {
     for (const key in currentBinding.dependency) {
-      if (currentBinding.dependency.hasOwnProperty(key)) {
+      if (
+        Object.prototype.hasOwnProperty.call(currentBinding.dependency, key)
+      ) {
         const depTypeName = Core.__getTypeName(currentBinding.dependency[key]);
 
         if (depTypeName === "String" && depTypeName.length > 0) {
