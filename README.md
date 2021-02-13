@@ -2,8 +2,8 @@
 [![node](https://img.shields.io/badge/node-8.4.0-green.svg)](https://nodejs.org/en/download/releases/)
 [![ecmascript 6](https://img.shields.io/badge/ecmascript-6-green.svg)](http://es6-features.org/)
 
-# di-namic
-Simple dependency injection container for Node. __ECMAScript 6 only__.
+# totally-di
+Simple dependency injection container for Node, forked from [di-namic](https://gitlab.com/leebow/di-namic). __ECMAScript 6 only__.
 
 ## Why?
 
@@ -24,36 +24,12 @@ Simply put: ***Don't instantiate dependencies in the module!***
   - static objects
   - primitive types (ie: numbers, booleans, strings)
 
-## Breaking changes
-
-As of version 0.3.0, a breaking change has been introduced:
-
-**< 0.3.0:**
-
-```javascript
-var Container = require('di-namic');
-```
-
-**>= 0.3.0:**
-
-```javascript
-var Container = require('di-namic').Container;	// to be deprecated
-```
-
-OR
-
-```javascript
-var Container = require('di-namic').ContainerV2;
-```
-
-ContainerV2 doesn't support callbacks - it returns promises only. All methods can therefore also be used with `await`.
-
 ## An example module
 
 The following examples are of modules that have dependencies on other modules.
 
 
-**Prototype-based** (with promises)
+**Prototype-based** (not recommended (ES5 Classes); with promises)
 
 ```javascript
 module.exports = TestObj1;
@@ -64,48 +40,45 @@ function TestObj1(dependency1, dependency2) {
 }
 
 TestObj1.prototype.testMethod = function () {
+  const self = this;
 
-    var self = this;
-
-    return new Promise((resolve, reject) => {
-
-        self.__dependency1.testMethod()
-            .then(result1 => {
-                self.__dependency2.testMethod(result1)
-                    .then(result2 => {
-                        resolve(result2);
-                    })
-                    .catch(err => {
-                        return reject(err);
-                    });
-            })
-            .catch(err => {
-                reject(err);
-            });
-    });
+  return new Promise((resolve, reject) => {
+    self.__dependency1.testMethod()
+      .then(result1 => {
+        self.__dependency2.testMethod(result1)
+          .then(result2 => {
+            resolve(result2);
+          })
+          .catch(err => {
+            return reject(err);
+          });
+      })
+      .catch(err => {
+        reject(err);
+      });
+  });
 };
 ```
 
 ***OR***
 
-**Class-based**
+**Class-based** (recommended (ES6 Classes))
 
 ```javascript
 module.exports = class TestObj1 {
+  constructor(dependency1, dependency2) {
+    this.__dependency1 = dependency1;
+    this.__dependency2 = dependency2;
+  }
 
-    constructor(dependency1, dependency2) {
-        this.__dependency1 = dependency1;
-        this.__dependency2 = dependency2;
+  async testMethod() {
+    try {
+      const result1 = await this.__dependency1.testMethod();
+      return await this.__dependency2.testMethod(result1);
+    } catch (err) {
+      throw err;
     }
-
-    async testMethod() {
-        try {
-            var result1 = await this.__dependency1.testMethod();
-            return await this.__dependency2.testMethod(result1);
-        } catch (err) {
-            throw err;
-        }
-    }
+  }
 };
 ```
 
@@ -118,13 +91,7 @@ The module is therefore not responsible for creating instances of a dependency, 
 Register a dependency. Each time `resolve` is called, a new instance of the dependency is returned.
 
 ```javascript
-/* Container */
-container.register(alias, dependency, ctorArgAliases, callback)
-
-/* ContainerV2 */
-container.register(alias, dependency, ctorArgAliases).then...	
-//OR
-await container.register(alias, dependency, ctorArgAliases)
+container.register(alias, dependency, ctorArgAliases)
 ```
 
 ### `registerFactory`
@@ -132,13 +99,7 @@ await container.register(alias, dependency, ctorArgAliases)
 Register a dependency. Each time `resolve` is called, a new instance of the dependency is returned, using the dependency's own factory method.
 
 ```javascript
-/* Container */
-container.registerFactory(alias, dependency, factoryMethodName, callback)
-
-/* ContainerV2 */
-container.registerFactory(alias, dependency, factoryMethodName).then...
-// OR
-await container.registerFactory(alias, dependency, factoryMethodName)
+container.registerFactory(alias, dependency, factoryMethodName)
 ```
 
 ### `registerSingleton`
@@ -146,13 +107,7 @@ await container.registerFactory(alias, dependency, factoryMethodName)
 Register a dependency. Each time `resolve` is called, a singleton instance of the dependency is returned. The container maintains a single instance.
 
 ```javascript
-/* Container */
-container.registerSingleton(alias, dependency, callback)
-
-/* ContainerV2 */
-container.registerSingleton(alias, dependency).then...
-// OR
-await container.registerSingleton(alias, dependency)
+container.registerSingleton(alias, dependency)
 ```
 
 ### `registerSingletonFactory`
@@ -160,13 +115,7 @@ await container.registerSingleton(alias, dependency)
 Register a dependency. Each time `resolve` is called, a singleton instance of the dependency is returned. The container maintains a single instance, which is originally created by the dependency's own factory method.
 
 ```javascript
-/* Container */
-container.registerSingletonFactory(alias, dependency, factoryMethodName, callback)
-
-/* ContainerV2 */
-container.registerSingletonFactory(alias, dependency, factoryMethodName).then...
-// OR
-await container.registerSingletonFactory(alias, dependency, factoryMethodName)
+container.registerSingletonFactory(alias, dependency, factoryMethodName)
 ```
 
 ### `resolve`
@@ -174,27 +123,19 @@ await container.registerSingletonFactory(alias, dependency, factoryMethodName)
 Returns an instance of a dependency.
 
 ```javascript
-/* Container */
-container.resolve(alias, callback)
-
-/* ContainerV2 */
-container.resolve(alias).then...
-// OR
-await container.resolve(alias)
+container.resolve(alias)
 ```
 
 ### Parameters:
 
 - __alias__:
   - (string) key to refer to the registration
-- __dependency__ - the dependency itself, which can be any of the following types:
-  - module
-  - anonymous object
-  - static object
-  - primitive (string, integer, boolean)
-- __ctorArgAliases__ - the constructor arguments, referred to by their aliases
-- **factoryMethodName** - the factory method that creates an instance of the dependency
-- __callback__ - this is an async function, so this is the callback
+- __dependency__:
+  - (object|instance|primitive) the dependency itself:
+- __ctorArgAliases__:
+  - the constructor arguments (i.e. dependencies), referred to by the aliases they've been registered with
+- **factoryMethodName**
+  - the factory method that creates an instance of the dependency
 
 ## Usage
 
@@ -222,29 +163,27 @@ The examples below are based on the module sample above.
 __index.js__
 
 ```javascript
-var Container = require('di-namic').ContainerV2;
-var Dependency1 = require('../lib/dependency1');
-var Dependency2 = require('../lib/dependency2');
-var TestObj1 = require('../lib/testObj1');
-var app = require('../app');
+const Container = require('di-namic').ContainerV2;
+const Dependency1 = require('../lib/dependency1');
+const Dependency2 = require('../lib/dependency2');
+const TestObj1 = require('../lib/testObj1');
+const app = require('../app');
 
 module.exports = class Index {
-
     constructor() {
         this.__container = new Container();
     }
 
     //register the dependencies with the container
     async register() {
-
         await this.__container.register('Bob', Dependency1);
         await this.__container.register('Mary', Dependency2);
+
         // 'Joe' relies on 'Bob' and 'Mary' 
         await this.__container.register('Joe', TestObj1, ['Bob', 'Mary']);
     }
 
     async initialize() {
-
         await this.register();
 
         // resolve the dependency (including sub-dependencies)
