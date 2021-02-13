@@ -6,8 +6,8 @@ export default class {
   }
 
   testMethod(callback) {
-      this.#dependency8.testFunction(function(err, result){
-          callback(null, result);
-      });
-  };
+    this.#dependency8.testFunction(function (err, result) {
+      callback(null, result);
+    });
+  }
 }
