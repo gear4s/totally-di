@@ -39,9 +39,8 @@
     "nyc": "^15.1.0",
     "prettier": "^2.1.2",
     "sinon": "^9.2.1",
-    "sinon-chai": "^3.5.0"
-  },
-  "dependencies": {
+    "sinon-chai": "^3.5.0",
     "sinon-register": "^1.0.1"
-  }
+  },
+  "dependencies": {}
 }
