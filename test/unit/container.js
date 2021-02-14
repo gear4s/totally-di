@@ -1,4 +1,4 @@
-import Container from "~/src/container";
+import Container from "../../src/container";
 import Obj1 from "../lib/obj-1";
 import Obj2 from "../lib/obj-2";
 import Obj3 from "../lib/obj-3";
