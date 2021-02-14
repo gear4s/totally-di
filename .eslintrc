@@ -1,5 +1,5 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaVersion": 11
   },
@@ -18,7 +18,7 @@
   ],
   "globals": {},
   "plugins": [
-    "babel",
+    "@babel",
     "prettier"
   ],
   "rules": {
