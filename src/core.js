@@ -50,12 +50,17 @@ export default class Core {
     const instance = (() => {
       // subclass extends superclass
       if (proto) {
-        if (Core.__prototypeIsEmptyObject(proto))
+        if (Core.__prototypeIsEmptyObject(proto)) {
           // static object
           return new dependency(...args);
-        else Temp.prototype = Object.create(proto); // inherit the prototype
-      } // no prototype
-      else Temp.prototype = Object.create(dependency);
+        } else {
+          // inherit the prototype
+          Temp.prototype = Object.create(proto);
+        }
+      } else {
+        // no prototype
+        Temp.prototype = Object.create(dependency);
+      }
 
       return new Temp(args);
     })();
@@ -74,38 +79,37 @@ export default class Core {
   }
 
   __resolveDependencies(binding) {
+    /** @param {Array} aliases */
     const recurse = (aliases) => {
-      const args = [];
-
-      aliases.forEach((arg) => {
+      return aliases.map((arg) => {
         const currentBinding = this.__getBinding(arg);
         const typeName = Core.__getTypeName(currentBinding.dependency);
+
+        if (arg.ctorArgAliases !== undefined && arg.ctorArgAliases.length > 0) {
+          // recurse the alias's constructor arguments on next event loop tick
+          setImmediate(() => {
+            recurse(arg.ctorArgAliases);
+          });
+        }
 
         switch (typeName) {
           case "Object":
             if (currentBinding.factoryMethod != null)
-              args.push(this.createInstance(arg));
+              return this.createInstance(arg);
             else if (currentBinding.rawObject) {
-              args.push(currentBinding.dependency);
+              return currentBinding.dependency;
             } else {
               this.__injectAnonymousObjectValues(currentBinding);
-              args.push(currentBinding.dependency);
+              return currentBinding.dependency;
             }
-            break;
           case "Number":
           case "String":
           case "Boolean":
-            args.push(currentBinding.dependency);
-            break;
+            return currentBinding.dependency;
           default:
-            args.push(this.createInstance(arg));
+            return this.createInstance(arg);
         }
-
-        if (arg.ctorArgAliases !== undefined && arg.ctorArgAliases.length > 0)
-          return recurse(arg.ctorArgAliases);
       });
-
-      return args;
     };
 
     return recurse(binding.ctorArgAliases);
