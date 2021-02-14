@@ -32,7 +32,6 @@ describe("unit - container v2", function () {
     const result = container.resolve("Joe");
 
     result.testMethod(function (err, testResult) {
-      console.log(testResult);
       expect(testResult).to.equal("success");
       done();
     });
@@ -123,8 +122,6 @@ describe("unit - container v2", function () {
     container.register("Marmite", Dependency5, ["Toast"]);
 
     const result = container.resolve("Marmite");
-
-    console.log("BINDINGS LENGTH: ", container.bindingLen);
 
     expect(result.testMethod()).to.equal("buttered");
   });
