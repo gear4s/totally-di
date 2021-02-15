@@ -51,6 +51,7 @@ export default class Container {
       ctorArgAliases: ctorArgAliases,
       factoryMethod: factoryMethod,
       singleton: false,
+      factory: true,
     });
   }
 
@@ -66,6 +67,7 @@ export default class Container {
       ctorArgAliases: ctorArgAliases,
       factoryMethod: factoryMethod,
       singleton: true,
+      factory: true,
     });
   }
 

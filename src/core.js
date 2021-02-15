@@ -7,6 +7,40 @@ export default class Core {
   }
 
   addBinding(binding) {
+    if (typeof binding.alias !== "string") {
+      throw new Error(
+        "Failed to register dependency: 'alias' required as a string"
+      );
+    }
+
+    try {
+      Core.__prototypeIsEmptyObject(binding.dependency);
+    } catch (e) {
+      throw new TypeError(
+        "Failed to register dependency: 'dependency' required to be defined as an object-like type"
+      );
+    }
+
+    if (!binding.rawObject && !Array.isArray(binding.ctorArgAliases)) {
+      throw new Error(
+        "Failed to register dependency: 'ctorArgAliases' required to be an array"
+      );
+    }
+
+    if (binding.factory) {
+      if (typeof binding.factoryMethod !== "string") {
+        throw new Error(
+          "Failed to register dependency: 'factoryMethod'  required to be the name of a factory function when registering factories"
+        );
+      }
+
+      if (typeof binding.dependency[binding.factoryMethod] !== "function") {
+        throw new Error(
+          "Failed to register dependency: 'factoryMethod' is not a valid method within the dependency"
+        );
+      }
+    }
+
     this.#bindings.push(binding);
   }
 
