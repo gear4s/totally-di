@@ -52,7 +52,6 @@ export default class Core {
     const isSingleton = binding.singleton;
     const isRawObject = binding.rawObject;
     const dependency = binding.dependency;
-    const proto = dependency.prototype;
     const factoryMethod = dependency[binding.factoryMethod];
 
     // just return a stored singleton if exists
@@ -72,12 +71,34 @@ export default class Core {
     }
 
     // if this is a factory method, just invoke it and return
-    if (factoryMethod != null) {
-      const result = factoryMethod(...args); // use the spread operator
+    if (factoryMethod !== undefined) {
+      const result = factoryMethod(...args);
 
-      if (isSingleton) this.#singletons[binding.alias] = result;
+      if (isSingleton) {
+        this.#singletons[binding.alias] = result;
+      }
 
       return result;
+    }
+
+    const instance = this.getInstanceOf(dependency, args);
+
+    if (isSingleton) {
+      this.#singletons[binding.alias] = instance;
+    }
+
+    return instance;
+  }
+
+  /** @private */
+  getInstanceOf(dependency, args) {
+    const proto = dependency.prototype;
+
+    if (proto && isEmptyObject(proto)) {
+      // create new instance of dependency if it has
+      // an existing prototype, and if its prototype
+      // is not empty
+      return new dependency(...args);
     }
 
     function Temp(args) {
@@ -85,28 +106,8 @@ export default class Core {
       this.constructor(...args);
     }
 
-    // IIFE to get instance
-    const instance = (() => {
-      // subclass extends superclass
-      if (proto) {
-        if (isEmptyObject(proto)) {
-          // static object
-          return new dependency(...args);
-        } else {
-          // inherit the prototype
-          Temp.prototype = Object.create(proto);
-        }
-      } else {
-        // no prototype
-        Temp.prototype = Object.create(dependency);
-      }
-
-      return new Temp(args);
-    })();
-
-    if (isSingleton) this.#singletons[binding.alias] = instance;
-
-    return instance;
+    Temp.prototype = Object.create(proto || dependency);
+    return new Temp(args);
   }
 
   __getBinding(alias) {
