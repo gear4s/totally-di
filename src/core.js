@@ -1,3 +1,6 @@
+import isEmptyObject from "./util/emptyObject";
+import getTypeName from "./util/typeName";
+
 export default class Core {
   #bindings = [];
   #singletons = {};
@@ -14,7 +17,7 @@ export default class Core {
     }
 
     try {
-      Core.__prototypeIsEmptyObject(binding.dependency);
+      isEmptyObject(binding.dependency);
     } catch (e) {
       throw new TypeError(
         "Failed to register dependency: 'dependency' required to be defined as an object-like type"
@@ -84,7 +87,7 @@ export default class Core {
     const instance = (() => {
       // subclass extends superclass
       if (proto) {
-        if (Core.__prototypeIsEmptyObject(proto)) {
+        if (isEmptyObject(proto)) {
           // static object
           return new dependency(...args);
         } else {
@@ -108,16 +111,12 @@ export default class Core {
     return this.#bindings.find((binding) => binding.alias === alias);
   }
 
-  static __prototypeIsEmptyObject(proto) {
-    return Object.keys(proto).length === 0;
-  }
-
   __resolveDependencies(binding) {
     /** @param {Array} aliases */
     const recurse = (aliases) => {
       return aliases.map((arg) => {
         const currentBinding = this.__getBinding(arg);
-        const typeName = Core.__getTypeName(currentBinding.dependency);
+        const typeName = getTypeName(currentBinding.dependency);
 
         if (arg.ctorArgAliases !== undefined && arg.ctorArgAliases.length > 0) {
           // recurse the alias's constructor arguments on next event loop tick
@@ -149,30 +148,12 @@ export default class Core {
     return recurse(binding.ctorArgAliases);
   }
 
-  static __getTypeName(obj) {
-    const str = (obj.prototype
-      ? obj.prototype.constructor
-      : obj.constructor
-    ).toString();
-
-    // find functions in obj
-    const matched = str.match(/function\s(\w*)/);
-
-    if (matched != null) {
-      const ctorName = str.match(/function\s(\w*)/)[1];
-      const aliases = ["", "anonymous", "Anonymous"];
-      return aliases.indexOf(ctorName) > -1 ? "Function" : ctorName;
-    }
-
-    return null;
-  }
-
   __injectAnonymousObjectValues(currentBinding) {
     for (const key in currentBinding.dependency) {
       if (
         Object.prototype.hasOwnProperty.call(currentBinding.dependency, key)
       ) {
-        const depTypeName = Core.__getTypeName(currentBinding.dependency[key]);
+        const depTypeName = getTypeName(currentBinding.dependency[key]);
 
         if (depTypeName === "String" && depTypeName.length > 0) {
           const injectedAliasIndex = currentBinding.dependency[key].indexOf(
