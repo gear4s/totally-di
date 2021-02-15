@@ -56,13 +56,15 @@ export default class Core {
     const factoryMethod = dependency[binding.factoryMethod];
 
     // just return a stored singleton if exists
-    if (isSingleton && this.#singletons[alias] != null)
+    if (isSingleton && this.#singletons[alias] !== undefined) {
       return this.#singletons[alias];
+    }
 
     const args = [];
 
-    if (binding.ctorArgAliases !== undefined)
+    if (binding.ctorArgAliases !== undefined) {
       args.push(...this.__resolveDependencies(binding));
+    }
 
     // if this is a raw object, just return it
     if (isRawObject === true) {
@@ -127,18 +129,22 @@ export default class Core {
 
         switch (typeName) {
           case "Object":
-            if (currentBinding.factoryMethod != null)
-              return this.createInstance(arg);
-            else if (currentBinding.rawObject) {
-              return currentBinding.dependency;
-            } else {
-              this.__injectAnonymousObjectValues(currentBinding);
+            if (currentBinding.rawObject) {
               return currentBinding.dependency;
             }
+
+            if (currentBinding.factoryMethod != null) {
+              return this.createInstance(arg);
+            }
+
+            this.__injectAnonymousObjectValues(currentBinding);
+            return currentBinding.dependency;
+
           case "Number":
           case "String":
           case "Boolean":
             return currentBinding.dependency;
+
           default:
             return this.createInstance(arg);
         }
